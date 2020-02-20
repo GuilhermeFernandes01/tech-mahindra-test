@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "prod": "node src/server.js",
+    "dev": "nodemon src/server.js --ignore __tests__",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -18,13 +20,18 @@
   },
   "homepage": "https://github.com/GuilhermeFernandes01/tech-mahindra-test#readme",
   "dependencies": {
+    "bcrypt": "^3.0.8",
     "express": "^4.17.1",
-    "mongoose": "^5.9.1"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.1",
+    "uuid": "^3.4.0",
+    "yup": "^0.28.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2"
   }
 }

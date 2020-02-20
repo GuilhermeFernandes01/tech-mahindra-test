@@ -1,9 +1,16 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const { connectionString } = require('./config/database');
 const routes = require('./routes');
 
 class App {
   constructor() {
     this.express = express();
+
+    this.middlewares();
+    this.routes();
+    mongoose.connect(connectionString,
+      { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
   }
 
   middlewares() {
