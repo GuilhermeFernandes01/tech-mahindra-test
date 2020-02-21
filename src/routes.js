@@ -8,7 +8,7 @@ const routes = Router();
 routes.post('/signup', User.create);
 routes.post('/signin', Session.create);
 
-routes.use(authMiddleware);
+routes.use(authMiddleware.validateAuthorization);
 
 routes.use('/buscar', User.search);
 
