@@ -9,8 +9,11 @@ class App {
 
     this.middlewares();
     this.routes();
-    mongoose.connect(connectionString,
-      { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+    mongoose.connect(connectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
   }
 
   middlewares() {
