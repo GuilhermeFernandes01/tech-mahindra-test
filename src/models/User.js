@@ -29,19 +29,20 @@ const UserSchema = new mongoose.Schema({
   },
   data_criacao: {
     type: Date,
-    default: Date.now(),
+    default: new Date(Date.now()).toISOString(),
     required: true,
   },
   data_atualizacao: {
     type: Date,
-    default: Date.now(),
+    default: new Date(Date.now()).toISOString(),
     required: true,
   },
   ultimo_login: {
     type: Date,
-    default: Date.now(),
+    default: new Date(Date.now()).toISOString(),
     required: true,
   },
+  token: String,
 });
 
 // UserSchema.pre('save', async (next) => {

@@ -44,18 +44,34 @@ module.exports = {
         telefones,
       });
 
-      const token = jwt.sign({ id }, authConfig.secret, {
+      const tokenBase = jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       });
 
+      const token = await bcrypt.hash(tokenBase, 8);
+
+      await User.updateOne({ id }, { token });
+
       return res.status(201).json(
         {
-          id, data_criacao, data_atualizacao, ultimo_login, token,
+          id, data_criacao, data_atualizacao, ultimo_login, tokenBase,
         },
       );
     } catch (err) {
       const { message: mensagem } = err;
       return res.status(400).json({ mensagem });
     }
+  },
+
+  async search(req, res) {
+    const { user_id } = req.query;
+
+    const {
+      id, telefones, data_criacao, data_atualizacao, ultimo_login, nome, email,
+    } = await User.findOne({ id: user_id });
+
+    return res.json({
+      id, telefones, data_criacao, data_atualizacao, ultimo_login, nome, email,
+    });
   },
 };

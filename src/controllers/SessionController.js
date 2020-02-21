@@ -6,39 +6,47 @@ const authConfig = require('../config/auth');
 
 class SessionController {
   async create(req, res) {
-    const schema = yup.object().shape({
-      email: yup.string().email().required(),
-      senha: yup.string().required(),
-    });
+    try {
+      const schema = yup.object().shape({
+        email: yup.string().email().required(),
+        senha: yup.string().required(),
+      });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ mensagem: 'Corpo da requisição não é o esperado' });
-    }
+      if (!(await schema.isValid(req.body))) {
+        return res.status(400).json({ mensagem: 'Corpo da requisição não é o esperado' });
+      }
 
-    const { email, senha } = req.body;
+      const { email, senha } = req.body;
 
-    const user = await User.findOne({ email });
+      const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(401).json({ mensagem: 'Usuário não encontrado' });
-    }
+      if (!user) {
+        return res.status(401).json({ mensagem: 'Usuário e/ou senha inválidos' });
+      }
 
-    if (!(await bcrypt.compare(senha, user.senha))) {
-      return res.status(401).json({ mensagem: 'Senha não bate' });
-    }
+      if (!(await bcrypt.compare(senha, user.senha))) {
+        return res.status(401).json({ mensagem: 'Usuário e/ou senha inválidos' });
+      }
 
-    const { id, name } = user;
+      const ultimo_login = new Date(Date.now());
+      await User.updateOne({ email }, { ultimo_login });
 
-    return res.status(201).json({
-      user: {
+      const {
+        id, data_criacao, data_atualizacao,
+      } = user;
+
+      return res.status(201).json({
         id,
-        name,
-        email,
-      },
-      token: jwt.sign({ id }, authConfig.secret, {
-        expiresIn: authConfig.expiresIn,
-      }),
-    });
+        data_criacao,
+        data_atualizacao,
+        ultimo_login,
+        token: jwt.sign({ id }, authConfig.secret, {
+          expiresIn: authConfig.expiresIn,
+        }),
+      });
+    } catch (err) {
+      return res.status(400).json({ mensagem: 'Erro' });
+    }
   }
 }
 
