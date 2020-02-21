@@ -8,8 +8,6 @@ const routes = Router();
 routes.post('/signup', User.create);
 routes.post('/signin', Session.create);
 
-routes.use(authMiddleware.validateAuthorization);
-
-routes.use('/buscar', User.search);
+routes.use('/buscar', authMiddleware.validateAuthorization, User.search);
 
 module.exports = routes;
