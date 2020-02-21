@@ -9,6 +9,7 @@ routes.post('/signup', User.create);
 routes.post('/signin', Session.create);
 
 routes.use(authMiddleware);
+
 routes.use('/buscar', User.search);
 
 module.exports = routes;

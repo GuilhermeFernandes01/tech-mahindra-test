@@ -8,12 +8,17 @@ class SessionController {
   async create(req, res) {
     try {
       const schema = yup.object().shape({
-        email: yup.string().email().required(),
+        email: yup
+          .string()
+          .email()
+          .required(),
         senha: yup.string().required(),
       });
 
       if (!(await schema.isValid(req.body))) {
-        return res.status(400).json({ mensagem: 'Corpo da requisição não é o esperado' });
+        return res
+          .status(400)
+          .json({ mensagem: 'Corpo da requisição não é o esperado' });
       }
 
       const { email, senha } = req.body;
@@ -21,19 +26,21 @@ class SessionController {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(401).json({ mensagem: 'Usuário e/ou senha inválidos' });
+        return res
+          .status(401)
+          .json({ mensagem: 'Usuário e/ou senha inválidos' });
       }
 
       if (!(await bcrypt.compare(senha, user.senha))) {
-        return res.status(401).json({ mensagem: 'Usuário e/ou senha inválidos' });
+        return res
+          .status(401)
+          .json({ mensagem: 'Usuário e/ou senha inválidos' });
       }
 
       const ultimo_login = new Date(Date.now());
       await User.updateOne({ email }, { ultimo_login });
 
-      const {
-        id, data_criacao, data_atualizacao,
-      } = user;
+      const { id, data_criacao, data_atualizacao } = user;
 
       return res.status(201).json({
         id,
