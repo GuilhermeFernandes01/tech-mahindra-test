@@ -61,7 +61,7 @@ module.exports = {
         data_criacao,
         data_atualizacao,
         ultimo_login,
-        tokenBase,
+        token,
       });
     } catch (err) {
       const { message: mensagem } = err;
